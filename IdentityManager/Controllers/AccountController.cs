@@ -67,7 +67,7 @@ namespace IdentityManager.Controllers
 
                 if (result.Succeeded)
                 {
-                    if (viewModel.RoleSelected != null && viewModel.RoleSelected.Length > 0 && model.RoleSelected == SD.Admin)
+                    if (viewModel.RoleSelected != null && viewModel.RoleSelected.Length > 0 && viewModel.RoleSelected == SD.Admin)
                     {
                         await _userManager.AddToRoleAsync(user, SD.Admin);
                     }
@@ -235,6 +235,13 @@ namespace IdentityManager.Controllers
 
         [HttpGet]
         public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult NoAccess()
         {
             return View();
         }

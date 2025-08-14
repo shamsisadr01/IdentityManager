@@ -4,6 +4,7 @@ using IdentityManager.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Encodings.Web;
 
 namespace IdentityManager.Controllers
 {
@@ -12,12 +13,14 @@ namespace IdentityManager.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly UrlEncoder _urlEncoder;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailSender emailSender, UrlEncoder urlEncoder)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _urlEncoder = urlEncoder;
         }
 
         public IActionResult Register(string returnurl = null)
@@ -274,10 +277,16 @@ namespace IdentityManager.Controllers
         [Authorize]
         public async Task<IActionResult> EnableAuthenticator()
         {
+            string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
+            
             var user = await _userManager.GetUserAsync(User);
             await _userManager.ResetAuthenticatorKeyAsync(user);
             var token = await _userManager.GetAuthenticatorKeyAsync(user);
-            var model = new TwoFactorAuthenticationViewModel() { Token = token };
+           
+            string AuthUri = string.Format(AuthenticatorUriFormat, _urlEncoder.Encode("IdentityManager"),
+                _urlEncoder.Encode(user.Email), token);
+
+            var model = new TwoFactorAuthenticationViewModel() { Token = token, QRCodeUrl = AuthUri };
             return View(model);
         }
 

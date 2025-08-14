@@ -126,6 +126,18 @@ namespace IdentityManager.Controllers
             return code == null ? View("Error") : View();
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ResetPassword(ResetPasswordViewModel model)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ResetPasswordConfirmation(string code = null)
+        {
+            return code == null ? View("Error") : View();
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]

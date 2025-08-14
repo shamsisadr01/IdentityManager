@@ -46,6 +46,17 @@ namespace IdentityManager.Controllers
 
                 if (result.Succeeded)
                 {
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    var callbackurl = Url.Action("ConfirmEmail", "Account", new
+                    {
+                        userid = user.Id,
+                        code
+                    }, protocol: HttpContext.Request.Scheme);
+
+                    await _emailSender.SendEmailAsync("Test",viewModel.Email, "Confirm Email - Identity Manager",
+                        $"Please confirm your email by clicking here: <a href='{callbackurl}'>link</a>");
+                 
+                    
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return LocalRedirect(returnurl);
                 }

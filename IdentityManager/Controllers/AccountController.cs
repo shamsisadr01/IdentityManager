@@ -67,6 +67,33 @@ namespace IdentityManager.Controllers
             return View(viewModel);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string code, string userId)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user == null)
+                {
+                    return View("Error");
+                }
+
+                var result = await _userManager.ConfirmEmailAsync(user, code);
+                if (result.Succeeded)
+                {
+                    return View();
+                }
+
+            }
+            return View("Error");
+        }
+
+        [HttpGet]
+        public IActionResult Error()
+        {
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> LogOff()

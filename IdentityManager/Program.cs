@@ -1,7 +1,10 @@
 using IdentityManager.Data;
 using IdentityManager.Models;
+using IdentityManager.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Configuration;
+using IdentityManager.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +19,9 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDBContext>();
 
+
+builder.Services.AddScoped<IEmailSender, EmailSender>();
+
 builder.Services.Configure<IdentityOptions>(opt =>
 {
     opt.Password.RequireDigit = false;
@@ -26,6 +32,8 @@ builder.Services.Configure<IdentityOptions>(opt =>
     opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromDays(10000);
     opt.SignIn.RequireConfirmedEmail = false;
 });
+
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
 var app = builder.Build();
 

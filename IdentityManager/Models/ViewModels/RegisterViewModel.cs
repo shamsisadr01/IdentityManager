@@ -25,5 +25,7 @@ public class RegisterViewModel
 
 
     public IEnumerable<SelectListItem> RoleList { get; set; }
+
+    [Display(Name = "Role")]
     public string RoleSelected { get; set; }
 }

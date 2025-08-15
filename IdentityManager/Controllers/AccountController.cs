@@ -67,9 +67,9 @@ namespace IdentityManager.Controllers
 
                 if (result.Succeeded)
                 {
-                    if (viewModel.RoleSelected != null && viewModel.RoleSelected.Length > 0 && viewModel.RoleSelected == SD.Admin)
+                    if (viewModel.RoleSelected != null)
                     {
-                        await _userManager.AddToRoleAsync(user, SD.Admin);
+                        await _userManager.AddToRoleAsync(user, viewModel.RoleSelected);
                     }
                     else
                     {

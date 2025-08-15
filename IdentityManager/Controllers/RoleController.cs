@@ -53,6 +53,7 @@ namespace IdentityManager.Controllers
             {
                 //create
                 await _roleManager.CreateAsync(new IdentityRole() { Name = roleObj.Name });
+                TempData["success"] = "Role created successfully";
             }
             else
             {
@@ -60,7 +61,8 @@ namespace IdentityManager.Controllers
                 var objFromDb = _db.Roles.FirstOrDefault(u => u.Id == roleObj.Id);
                 objFromDb.Name = roleObj.Name;
                 objFromDb.NormalizedName = roleObj.Name.ToUpper();
-                var result = await _roleManager.UpdateAsync(objFromDb);
+                await _roleManager.UpdateAsync(objFromDb);
+                TempData["success"] = "Role updated successfully";
             }
             return RedirectToAction(nameof(Index));
         }
@@ -72,6 +74,7 @@ namespace IdentityManager.Controllers
             if (objFromDb != null)
             {
                 await _roleManager.DeleteAsync(objFromDb);
+                TempData["success"] = "Role deleted successfully";
             }
 
             return RedirectToAction(nameof(Index));

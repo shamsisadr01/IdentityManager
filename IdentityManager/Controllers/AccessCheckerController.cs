@@ -31,6 +31,11 @@ namespace IdentityManager.Controllers
             return View();
         }
 
+        public IActionResult UserORAdminRoleAccess()
+        {
+            return View();
+        }
+
         //account with admin role and create Claim can access
         public IActionResult Admin_CreateAccess()
         {

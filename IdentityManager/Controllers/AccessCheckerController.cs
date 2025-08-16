@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityManager.Controllers
 {
+    [Authorize]
     public class AccessCheckerController : Controller
     {
         //Anyone can access this
+        [AllowAnonymous]
         public IActionResult AllAccess()
         {
             return View();

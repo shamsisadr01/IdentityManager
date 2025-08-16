@@ -28,6 +28,9 @@ builder.Services.ConfigureApplicationCookie(opt =>
 });
 
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddScoped<INumberOfDaysForAccount, NumberOfDaysForAccount>();
+builder.Services.AddScoped<IAuthorizationHandler, AdminWithOver1000DaysHandler>();
+
 
 builder.Services.Configure<IdentityOptions>(opt =>
 {
@@ -58,6 +61,8 @@ builder.Services.AddAuthorization(opt =>
     ));
 
     opt.AddPolicy("OnlySuperAdminChecker", p => p.Requirements.Add(new OnlySuperAdminChecker()));
+
+    opt.AddPolicy("AdminWithMoreThan1000Days", p => p.Requirements.Add(new AdminWithMoreThan1000DaysRequirement(1000)));
 });
 
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));

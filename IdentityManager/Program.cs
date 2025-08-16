@@ -44,6 +44,12 @@ builder.Services.AddAuthorization(opt =>
     opt.AddPolicy("Admin", policy => policy.RequireRole(SD.Admin));
     opt.AddPolicy("AdminAndUser", policy => policy.RequireRole(SD.Admin).RequireRole(SD.User));
     opt.AddPolicy("AdminRole_CreateClaim", policy => policy.RequireRole(SD.Admin).RequireClaim("create", "True"));
+    opt.AddPolicy("AdminRole_CreateEditDeleteClaim", policy => policy
+        .RequireRole(SD.Admin)
+        .RequireClaim("create", "True")
+        .RequireClaim("edit", "True")
+        .RequireClaim("delete", "True")
+    );
 });
 
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));

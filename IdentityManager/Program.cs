@@ -7,6 +7,7 @@ using System.Configuration;
 using IdentityManager;
 using IdentityManager.Services;
 using Microsoft.AspNetCore.Authorization;
+using IdentityManager.Authorize;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +56,8 @@ builder.Services.AddAuthorization(opt =>
     opt.AddPolicy("AdminRole_CreateEditDeleteClaim_ORSuperAdminRole", policy => policy.RequireAssertion(context =>
         AdminRole_CreateEditDeleteClaim_ORSuperAdminRole(context)
     ));
+
+    opt.AddPolicy("OnlySuperAdminChecker", p => p.Requirements.Add(new OnlySuperAdminChecker()));
 });
 
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));

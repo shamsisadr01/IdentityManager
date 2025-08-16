@@ -60,7 +60,8 @@ namespace IdentityManager.Controllers
                 {
                     UserName = viewModel.Email,
                     Email = viewModel.Email,
-                    Name = viewModel.Name
+                    Name = viewModel.Name,
+                    DateCreated = DateTime.Now
                 };
 
                 var result = await _userManager.CreateAsync(user, viewModel.Password);

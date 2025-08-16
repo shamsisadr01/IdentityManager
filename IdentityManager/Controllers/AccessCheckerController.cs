@@ -69,5 +69,10 @@ namespace IdentityManager.Controllers
         {
             return View();
         }
+
+        public IActionResult OnlyBhrugen()
+        {
+            return View();
+        }
     }
 }
